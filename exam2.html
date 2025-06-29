@@ -81,8 +81,8 @@
         
         .math {
             font-weight: bold;
-            font-size: 1.4rem;
-            color: #8257d2;
+            font-size: 1.2rem;
+            color: #FFD700;
         }
         
         .content {
@@ -804,8 +804,8 @@
                 <span><i class="fas fa-star"></i> Toplam 25 Puan</span>
             </div>
             <div class="relation-info">
-                <p>Grafikte verilen \( \mathrm{\mathbb{R} \to \mathbb{R} }\) tanımlı \(\mathrm{ f(x) = 2x-3 }\)
-                bağıntısının özelliklerini inceleyeceğiz ve fonksiyon olup olmadığını test edeceğiz.</p>
+                <p>Grafikte verilen <span class='math'>\( \mathrm{\mathbb{R} \to \mathbb{R} }\)</span> tanımlı <span class='math'>\(\mathrm{ f(x) = 2x-3 }\)</span>
+                bağıntısının fonksiyon olup olmadığını inceleyeceğiz.</p>
             </div>
         </header>
         
@@ -814,9 +814,9 @@
                 <div class="graph-header">
                     <h3><i class="fas fa-chart-line"></i> İnteraktif Grafik</h3>
                     <div class="graph-buttons">
-                        <button class="geogebra-btn" id="geogebra-btn">
+                        <!-- <button class="geogebra-btn" id="geogebra-btn">
                             <i class="fas fa-globe"></i> Geogebrada İncele
-                        </button>
+                        </button> -->
                         <button class="how-to-btn" id="how-to-btn">
                             <i class="fas fa-question-circle"></i> Nasıl Kullanılır?
                         </button>
@@ -861,14 +861,18 @@
                 </div>
                 
                 <div class="feedback incorrect">
-                    <i class="fas fa-times-circle"></i> Yanlış cevap. Lütfen tekrar deneyin.
+                    <i class="fas fa-times-circle"></i> Yanlış cevap. \( y = 2x-3 \) ifadesi bir fonksiyondur çünkü:<br><br>
+                    - Her x değeri için tam olarak bir y değeri vardır<br>
+                    - Düşey doğru testini geçer (her dikey çizgi grafiği sadece bir noktada keser)<br>
+                    - Tanım kümesindeki her eleman, değer kümesinde yalnızca bir elemanla eşleşir<br><br>
+                    Lütfen fonksiyon tanımını tekrar gözden geçirin ve sınava devam edin.
                 </div>
                 
                 <div class="buttons">
                     <button class="btn btn-check" id="check-main">
                         <i class="fas fa-check"></i> Kontrol Et
                     </button>
-                    <button class="btn" id="continue-btn" disabled>
+                    <button class="btn btn-next" id="continue-btn" disabled>
                         <i class="fas fa-arrow-right"></i> Sınava Devam Et
                     </button>
                 </div>
@@ -1058,7 +1062,7 @@
         </div>
         
         <footer>
-            <div class="module-nav">
+            <!--<div class="module-nav">
                 <button class="module-nav-btn">
                     <a href="exam1.html" style="color:inherit; text-decoration:none; display:block; width:100%; height:100%;">1</a>
                 </button>
@@ -1068,7 +1072,7 @@
                 </button>
                 <button class="module-nav-btn">4</button>
                 <button class="module-nav-btn">5</button>
-            </div>
+            </div> -->
             <p>Fonksiyon Kavramı ve Fonksiyonun Nitel Özellikleri Değerlendirme Sınavı</p>
         </footer>
     </div>
@@ -1231,8 +1235,15 @@
                     ctx.stroke();
                 }
                 
-                // Orijin etiketi (0,0)
-                ctx.fillText('0', originX + 5, originY + 20);
+                ctx.fillStyle = '#000000'; // Turuncu renk
+    ctx.beginPath();
+    ctx.arc(originX, originY, 5, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Orijin etiketi "O" harfi
+    ctx.fillStyle = '#1a2a6c';
+    ctx.font = 'bold 20px Arial';
+    ctx.fillText('O', originX + 8, originY + 15);
             }
             
             function drawFunction() {
@@ -1259,7 +1270,7 @@
                 
                 ctx.stroke();
                 
-                // Fonksiyonun sıfır noktasını işaretle (x = 1.5)
+                // Fonksiyonun sıfır noktasını işaretle (x = 1,5)
                 const zeroX = originX + 1.5 * scale;
                 const zeroY = originY - 0 * scale;
                 ctx.fillStyle = '#b21f1f';
@@ -1270,7 +1281,7 @@
                 // Sıfır noktası etiketi
                 ctx.fillStyle = '#b21f1f';
                 ctx.font = 'bold 14px Arial';
-                ctx.fillText('Sıfır Noktası (1.5, 0)', zeroX + 10, zeroY - 10);
+                ctx.fillText('Sıfır Noktası (1,5, 0)', zeroX + 10, zeroY - 10);
             }
             
             function drawVerticalLine() {
@@ -1624,6 +1635,7 @@
                 window.location.href = "exam3.html";
             }
             
+
             // Nasıl Kullanılır Modal İşlevselliği
             howToBtn.addEventListener('click', function() {
                 howToModal.style.display = 'flex';
@@ -1658,6 +1670,8 @@
                 }
             });
         });
+
+
     </script>
 </body>
 </html>
