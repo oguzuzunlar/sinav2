@@ -8,9 +8,6 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
-		
-	
-	
         * {
             margin: 0;
             padding: 0;
@@ -190,16 +187,17 @@
             font-size: 0.9rem;
         }
         
+        /* GRAFİK ALANI GÜNCELLEMELERİ */
         .graph-container {
             position: relative;
             width: 100%;
-            padding-top:80%; /* 5:6 aspect ratio */
+            height: 500px;
             margin: 0 auto;
             overflow: hidden;
             background-color: #fff;
             border-radius: 4px;
             box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
+            max-width: 100%;
         }
         
         #function-canvas {
@@ -839,6 +837,26 @@
                 height: 30px;
                 font-size: 0.8rem;
             }
+            
+            /* Mobil için grafik boyutu */
+            .graph-container {
+                height: 400px;
+            }
+            
+            .slider::-webkit-slider-thumb {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .slider-label {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            
+            .relation-info {
+                font-size: 0.95rem;
+            }
         }
         
         @media (max-width: 480px) {
@@ -849,6 +867,10 @@
             
             .score-display {
                 font-size: 2.5rem;
+            }
+            
+            .graph-container {
+                height: 300px;
             }
         }
     </style>
@@ -873,8 +895,7 @@
                 <span><i class="fas fa-star"></i> Toplam 30 Puan</span>
             </div>
             <div class="relation-info">
-               Grafikte verilen <span class="math">\( \mathrm{[-2, 3] \to \mathbb{R} }\)</span> tanımlı <span class="math">\( \mathrm{f(x) = 			\frac{1}{4}(x-1)^2 - 5 }\)</span> bağıntısının fonksiyon olup olmadığını inceleyeceğiz.
-              
+               Grafikte verilen <span class="math">\( \mathrm{[-2, 3] \to \mathbb{R} }\)</span> tanımlı <span class="math">\( \mathrm{f(x) = \frac{1}{4}(x-1)^2 - 5 }\)</span> bağıntısının fonksiyon olup olmadığını inceleyeceğiz.
             </div>
         </header>
         
@@ -1053,7 +1074,6 @@
                         <div class="options">
                             <div class="option" data-value="dogrusal">Doğrusal fonksiyon</div>
                             <div class="option" data-value="karesel">Karesel fonksiyon</div>
-
                         </div>
                         <div class="feedback correct">
                             <i class="fas fa-check-circle"></i> Doğru! y = a(x-h)^2 + k formundadır, karesel fonksiyondur.
@@ -1188,21 +1208,6 @@
         </div>
         
         <footer>
-            <!-- <div class="module-nav">
-                <button class="module-nav-btn">
-                    <a href="exam1.html" style="color:inherit; text-decoration:none; display:block; width:100%; height:100%;">1</a>
-                </button>
-                <button class="module-nav-btn">
-                    <a href="exam2.html" style="color:inherit; text-decoration:none; display:block; width:100%; height:100%;">2</a>
-                </button>
-                <button class="module-nav-btn">
-                    <a href="exam3.html" style="color:inherit; text-decoration:none; display:block; width:100%; height:100%;">3</a>
-                </button>
-                <button class="module-nav-btn">
-                    <a href="exam4.html" style="color:inherit; text-decoration:none; display:block; width:100%; height:100%;">4</a>
-                </button>
-                <button class="module-nav-btn active">5</button>
-            </div> -->
             <p>Fonksiyon Kavramı ve Fonksiyonun Nitel Özellikleri Değerlendirme Sınavı</p>
         </footer>
     </div>
@@ -1258,33 +1263,40 @@
             const DOMAIN_START = -2;
             const DOMAIN_END = 3;
             
+            // Y ekseni aralığı: -6 ile 2 arasında (8 birim)
+            const MIN_Y = -6;
+            const MAX_Y = 2;
+            const Y_RANGE = MAX_Y - MIN_Y;
+            
             // Initialize canvas size
             function resizeCanvas() {
                 const container = canvas.parentElement;
                 const width = container.clientWidth;
-                const height = container.clientHeight;
                 
                 canvas.width = width;
-                canvas.height = height;
+                canvas.height = container.clientHeight;
                 
                 drawGraph();
             }
             
-            // Coordinate conversion functions
-            function toMathX(pixelX) {
-                return (pixelX - canvas.width/2) / GRID_SIZE;
-            }
-            
-            function toMathY(pixelY) {
-                return (canvas.height/2 - pixelY) / GRID_SIZE - 2;
-            }
-            
+            // Yeni koordinat dönüşüm fonksiyonları
             function toPixelX(mathX) {
-                return mathX * GRID_SIZE + canvas.width/2;
+                const visibleRange = 7; // -3'ten 4'e kadar (7 birim)
+                return ((mathX + 3) / visibleRange) * canvas.width;
             }
             
             function toPixelY(mathY) {
-                return canvas.height/2 - (mathY + 2) * GRID_SIZE;
+                // Y ekseni: -6 ile 2 arasında (8 birim)
+                return ((MAX_Y - mathY) / Y_RANGE) * canvas.height;
+            }
+            
+            function toMathX(pixelX) {
+                const visibleRange = 7; // -3'ten 4'e kadar
+                return (pixelX / canvas.width) * visibleRange - 3;
+            }
+            
+            function toMathY(pixelY) {
+                return MAX_Y - (pixelY / canvas.height) * Y_RANGE;
             }
             
             // Draw grid and axes
@@ -1337,11 +1349,12 @@
                 ctx.fillStyle = AXIS_COLOR;
                 ctx.fill();
                 
-                // Y-axis arrow
+                // Y-axis arrow (2 noktasının üzerine çiziliyor)
+                const arrowY = toPixelY(MAX_Y) - 15;
                 ctx.beginPath();
-                ctx.moveTo(toPixelX(0) - 8, 15);
-                ctx.lineTo(toPixelX(0), 0);
-                ctx.lineTo(toPixelX(0) + 8, 15);
+                ctx.moveTo(toPixelX(0) - 8, arrowY);
+                ctx.lineTo(toPixelX(0), arrowY - 15);
+                ctx.lineTo(toPixelX(0) + 8, arrowY);
                 ctx.fill();
                 
                 // Draw axis labels
@@ -1351,7 +1364,7 @@
                 ctx.textBaseline = 'middle';
                 
                 // X-axis labels
-                for (let x = -4; x <= 4; x++) {
+                for (let x = -3; x <= 4; x++) {
                     if (x === 0) continue;
                     const pixelX = toPixelX(x);
                     ctx.fillText(x, pixelX, toPixelY(0) + 20);
@@ -1364,7 +1377,7 @@
                 }
                 
                 // Y-axis labels
-                for (let y = -6; y <= 2; y++) {
+                for (let y = MIN_Y; y <= MAX_Y; y++) {
                     if (y === 0) continue;
                     const pixelY = toPixelY(y);
                     ctx.fillText(y, toPixelX(0) + 20, pixelY);
@@ -1376,13 +1389,14 @@
                     ctx.stroke();
                 }
                 
-                // Origin label
-                ctx.fillText('0', toPixelX(0) + 20, toPixelY(0) + 20);
+                // Origin label - 20px boyutunda
+                ctx.font = 'bold 20px Arial';
+                ctx.fillText('O', toPixelX(0) + 20, toPixelY(0) + 20);
                 
                 // Axis titles
                 ctx.font = 'bold 16px Arial';
                 ctx.fillText('x', canvas.width - 20, toPixelY(0) + 30);
-                ctx.fillText('y', toPixelX(0) + 30, 20);
+                ctx.fillText('y', toPixelX(0) + 30, arrowY - 25);
             }
             
             // Function definition
@@ -1472,8 +1486,8 @@
                 // Draw endpoint labels
                 ctx.fillStyle = ENDPOINT_COLOR;
                 ctx.font = 'bold 14px Arial';
-                ctx.fillText(`(-2, ${startY.toFixed(2)})`, startPixelX - 60, startPixelY - 20);
-                ctx.fillText(`(3, ${endY.toFixed(2)})`, endPixelX + 60, endPixelY - 20);
+                //ctx.fillText(`(-2, ${startY.toFixed(2)})`, startPixelX - 60, startPixelY - 20);
+                //ctx.fillText(`(3, ${endY.toFixed(2)})`, endPixelX + 60, endPixelY - 20);
                 
                 // Draw domain boundaries
                 ctx.strokeStyle = 'rgba(225, 65, 65, 0.4)';
@@ -1493,8 +1507,6 @@
                 ctx.stroke();
                 
                 ctx.setLineDash([]);
-                
-
             }
             
             // Draw vertical line from slider
@@ -1519,9 +1531,6 @@
                 ctx.beginPath();
                 ctx.arc(pixelX, pixelY, 4, 0, Math.PI * 2);
                 ctx.fill();
-                
-                // Draw coordinates
-
                 
                 // Update vertical test result
                 verticalTestResult.textContent = '✓ Fonksiyon';
@@ -1569,9 +1578,6 @@
                     ctx.beginPath();
                     ctx.arc(pixelX, pixelY, 4, 0, Math.PI * 2);
                     ctx.fill();
-                    
-                    // Draw coordinates
-
                 }
             }
             
@@ -1857,7 +1863,6 @@
                 // Butonu göster
                 nextExamButton.style.display = 'block';
             }
-            
 		function sinavBitir(puan) {
                     // Mevcut sınavın puanını kaydet
                     sessionStorage.setItem("sinav5", puan);
@@ -1871,9 +1876,6 @@
             
             // Sınavı tamamla butonu (sonuç bölümü)
             nextExamButton.addEventListener('click', function() {
-                // Sınav tamamlandığında çalışacak fonksiyon
-                
-                
                 sinavBitir(totalScore);
             });
         });
