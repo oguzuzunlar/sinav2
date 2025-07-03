@@ -4,7 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fonksiyon Bilgisi Sınavı</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6" async></script>
+	<script>
+  	// Sınav başladığında çalıştır
+  	sessionStorage.setItem('sinav_aktif', 'evet');
+
+  	// Sınav bittiyse çalıştır
+  	// sessionStorage.removeItem('sinav_aktif');
+
+  	// Her sayfa açıldığında kontrol et
+  	if (sessionStorage.getItem('sinav_aktif') !== 'evet') {
+      	// Sınava izinsiz giriş => yönlendir
+     	 window.location.href = "giris.html"; // veya ana sayfa
+  	}
+	</script>
+
     <style>
         * {
             box-sizing: border-box;
@@ -246,6 +260,12 @@
     </style>
 </head>
 <body>
+	<script>
+	history.pushState(null, null, location.href);
+	window.onpopstate = function(event) {
+    	history.go(1);
+	};
+	</script>
     <div class="container">
         <div class="header">
             <h1>Fonksiyonun Tanımı ve Fonksiyonun Nitel Özellikleri Değerlendirme Sınavı</h1>
@@ -285,12 +305,13 @@
             </div>
             
             <p><strong>Toplam Puan:</strong> 100 puan (10 + 25 + 10 + 25 + 30)</p>
+		<p><strong>1.Basamak Değerlendirme Sonucu:</strong> Toplam Puan × %10</p>
         </div>
         
         <div class="exam-structure">
             <div class="structure-card">
                 <h3><span class="icon">📝</span>Sınav Yapısı</h3>
-                <p>Sınav, her birinde farklı türde soruların yer aldığı 5 aşamadan oluşur. Sorular, fonksiyon tanımı, özellikleri ve uygulamaları konularını kapsayacaktır. Soruları dikkatle okuyup cevaplamaya çalışın. 'Cevapları Kontrol Et' butonuna tıkladığınızda, cevaplarınız artık değiştirilemez. Lütfen unutmayın: Her sorunun cevaplanması zorunludur.</p>
+                <p>Sınav, her birinde farklı türde soruların yer aldığı 5 aşamadan oluşur. Sorular, fonksiyon tanımı ve nitel özellikleri uygulamalarını kapsamaktadır. Soruları dikkatle okuyup cevaplamaya çalışın. 'Cevapları Kontrol Et' butonuna tıkladığınızda, cevaplarınız artık değiştirilemez. Lütfen unutmayın: Her sorunun cevaplanması zorunludur.</p>
             </div>
             
             <div class="structure-card">
@@ -300,9 +321,7 @@
         </div>
         
         <div class="start-button">
-            <a href="exam1.html">
-                <button class="btn">Sınava Başla <i class="fas fa-arrow-right"></i></button>
-            </a>
+            <button class="btn" onclick="window.location.href='exam1.html'">Sınava Başla <i class="fas fa-arrow-right"></i></button>
         </div>
         
         <div class="footer">

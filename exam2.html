@@ -5,8 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fonksiyon Analizi Sınavı - y=2x-3</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6" async></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+	<script>
+  	// Sınav başladığında çalıştır
+  	sessionStorage.setItem('sinav_aktif', 'evet');
+
+  	// Sınav bittiyse çalıştır
+  	// sessionStorage.removeItem('sinav_aktif');
+
+  	// Her sayfa açıldığında kontrol et
+  	if (sessionStorage.getItem('sinav_aktif') !== 'evet') {
+      	// Sınava izinsiz giriş => yönlendir
+     	 window.location.href = "giris.html"; // veya ana sayfa
+  	}
+	</script>
+
     <style>
         * {
             margin: 0;
@@ -180,7 +194,17 @@
             height: 100%;
             display: block;
         }
-        
+                
+	    .function-display {
+            text-align: center;
+            font-size: 1.4rem;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f0f7ff;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #1a2a6c;
+        }
         .slider-container {
             margin-top: 15px;
             padding: 0 10px;
@@ -791,6 +815,12 @@
     </style>
 </head>
 <body>
+	<script>
+	history.pushState(null, null, location.href);
+	window.onpopstate = function(event) {
+    	history.go(1);
+	};
+	</script>
     <div class="container">
         <header>
             <div class="logo">
@@ -821,8 +851,10 @@
                             <i class="fas fa-question-circle"></i> Nasıl Kullanılır?
                         </button>
                     </div>
-                </div>
-                <p>\(\mathrm{ f(x) = 2x - 3} \) Bağıntısı ve Düşey Doğru Testi</p>
+                </div >
+                <div class="function-display">
+		<p>\(\mathrm{ f(x) = 2x - 3} \) Bağıntısı ve Düşey Doğru Testi</p> 
+		</div>
                 
                 <div class="canvas-wrapper">
                     <canvas id="graph-canvas"></canvas>
@@ -831,7 +863,7 @@
                 <div class="slider-container">
                     <div class="slider-label">
                         <span>Düşey Doğru Konumu:</span>
-                        <span id="slider-value">x = 0.00</span>
+                        <span id="slider-value">x = 0,00</span>
                     </div>
                     <input type="range" min="-5" max="5" step="0.01" value="0" class="slider" id="vertical-slider">
                 </div>
@@ -856,12 +888,12 @@
                     <div class="option" data-value="no">Hayır, fonksiyon değildir.</div>
                 </div>
                 <div class="feedback correct">
-                    <i class="fas fa-check-circle"></i> Doğru cevap! \(\mathrm{ y = 2x - 3 }\) bağıntısı bir fonksiyondur.
+                    Doğru cevap!  y = 2x - 3 bağıntısı bir fonksiyondur.
                     <p>Şimdi fonksiyonun özelliklerini analiz edebilirsiniz.</p>
                 </div>
                 
                 <div class="feedback incorrect">
-                    <i class="fas fa-times-circle"></i> Yanlış cevap. \( y = 2x-3 \) ifadesi bir fonksiyondur çünkü:<br><br>
+                    Yanlış cevap.  y = 2x-3  ifadesi bir fonksiyondur çünkü:<br><br>
                     - Her x değeri için tam olarak bir y değeri vardır<br>
                     - Düşey doğru testini geçer (her dikey çizgi grafiği sadece bir noktada keser)<br>
                     - Tanım kümesindeki her eleman, değer kümesinde yalnızca bir elemanla eşleşir<br><br>
@@ -881,7 +913,7 @@
             <!-- Fonksiyon Özellikleri Bölümü (15 puan) -->
             <div class="properties-section" id="properties-section">
                 <h3><i class="fas fa-tasks"></i> Fonksiyon Nitel Özellikleri  <span class="points-badge">15 Puan</span></h3>
-                <p>Temel soruyu doğru cevapladınız! Şimdi fonksiyonun temel özelliklerini belirlemek için aşağıdaki soruları cevaplayın:</p>
+                <p>Temel soruyu cevapladınız! Şimdi fonksiyonun temel özelliklerini belirlemek için aşağıdaki soruları cevaplayın:</p>
                 
                 <div class="progress-container">
                     <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
@@ -893,16 +925,16 @@
                         <h4><i class="fas fa-calculator"></i> Tanım Kümesi</h4>
                         <p>Fonksiyonun tanımlı olduğu x değerleri hangi aralıktadır?</p>
                         <div class="options">
-                            <div class="option" data-value="reel">Tüm reel sayılar</div>
-                            <div class="option" data-value="positive">Pozitif reel sayılar</div>
-                            <div class="option" data-value="negative">Negatif reel sayılar</div>
+                            <div class="option" data-value="reel">Gerçek sayılar</div>
+                            <div class="option" data-value="positive">Pozitif gerçek sayılar</div>
+                            <div class="option" data-value="negative">Negatif gerçek sayılar</div>
                             <div class="option" data-value="interval">[0, ∞)</div>
                         </div>
                         <div class="feedback correct">
-                            <i class="fas fa-check-circle"></i> Doğru! Tanım kümesi tüm reel sayılardır.
+                            <i class="fas fa-check-circle"></i> Doğru! Tanım kümesi gerçek sayılardır.
                         </div>
                         <div class="feedback incorrect">
-                            <i class="fas fa-times-circle"></i> Yanlış. Doğrusal fonksiyonlar tüm reel sayılarda tanımlıdır.
+                            <i class="fas fa-times-circle"></i> Yanlış. Doğrusal fonksiyonlar gerçek sayılarda tanımlıdır.
                         </div>
                     </div>
                     
@@ -911,16 +943,16 @@
                         <h4><i class="fas fa-chart-bar"></i> Görüntü Kümesi</h4>
                         <p>Fonksiyonun alabileceği y değerleri hangi aralıktadır?</p>
                         <div class="options">
-                            <div class="option" data-value="reel">Tüm reel sayılar</div>
-                            <div class="option" data-value="positive">Pozitif reel sayılar</div>
-                            <div class="option" data-value="negative">Negatif reel sayılar</div>
+                            <div class="option" data-value="reel">Gerçek sayılar</div>
+                            <div class="option" data-value="positive">Pozitif gerçek sayılar</div>
+                            <div class="option" data-value="negative">Negatif gerçek sayılar</div>
                             <div class="option" data-value="interval">[-3, ∞)</div>
                         </div>
                         <div class="feedback correct">
-                            <i class="fas fa-check-circle"></i> Doğru! Görüntü kümesi tüm reel sayılardır.
+                            <i class="fas fa-check-circle"></i> Doğru! Görüntü kümesi gerçek sayılardır.
                         </div>
                         <div class="feedback incorrect">
-                            <i class="fas fa-times-circle"></i> Yanlış. Doğrusal fonksiyonlar tüm reel sayıları alabilir.
+                            <i class="fas fa-times-circle"></i> Yanlış. Doğrusal fonksiyonlar gerçek sayıları alabilir.
                         </div>
                     </div>
                     
@@ -929,13 +961,13 @@
                         <h4><i class="fas fa-bullseye"></i> Fonksiyonun Sıfırı</h4>
                         <p>Fonksiyon hangi x değerinde y = 0 olur?</p>
                         <div class="options">
-                            <div class="option" data-value="1.5">x = 1.5</div>
+                            <div class="option" data-value="1,5">x = 1,5</div>
                             <div class="option" data-value="0">x = 0</div>
                             <div class="option" data-value="2">x = 2</div>
                             <div class="option" data-value="3">x = 3</div>
                         </div>
                         <div class="feedback correct">
-                            <i class="fas fa-check-circle"></i> Doğru! Fonksiyon x = 1.5'te sıfır olur.
+                            <i class="fas fa-check-circle"></i> Doğru! Fonksiyon x = 1,5'te sıfır olur.
                         </div>
                         <div class="feedback incorrect">
                             <i class="fas fa-times-circle"></i> Yanlış. Fonksiyon sıfırını bulmak için y = 0 yapıp x'i çözmelisiniz.
@@ -947,13 +979,13 @@
                         <h4><i class="fas fa-arrow-up"></i> Artan/Azalan Aralıklar</h4>
                         <p>Fonksiyon hangi aralıklarda artan/azalandır?</p>
                         <div class="options">
-                            <div class="option" data-value="artan">Tüm tanım kümesinde artan</div>
-                            <div class="option" data-value="azalan">Tüm tanım kümesinde azalan</div>
-                            <div class="option" data-value="kismi">(-∞, 0) azalan, (0, ∞) artan</div>
+                            <div class="option" data-value="artan">Tanım kümesinde artan</div>
+                            <div class="option" data-value="azalan">Tanım kümesinde azalan</div>
+                            <div class="option" data-value="kismi">(-∞, 0)'nda azalan, (0, ∞)'nda artan</div>
                             <div class="option" data-value="sabit">Sabit</div>
                         </div>
                         <div class="feedback correct">
-                            <i class="fas fa-check-circle"></i> Doğru! Fonksiyon eğimi pozitif olduğu için tüm tanım kümesinde artandır.
+                            <i class="fas fa-check-circle"></i> Doğru! Fonksiyon eğimi pozitif olduğu için tanım kümesinde artandır.
                         </div>
                         <div class="feedback incorrect">
                             <i class="fas fa-times-circle"></i> Yanlış. Eğimi inceleyin - pozitif eğim artan fonksiyonu gösterir.
@@ -965,13 +997,13 @@
                         <h4><i class="fas fa-plus-minus"></i> Pozitif/Negatif Aralıklar</h4>
                         <p>Fonksiyon hangi aralıklarda pozitif/negatiftir?</p>
                         <div class="options">
-                            <div class="option" data-value="poz-neg">x &lt; 1.5'te negatif, x &gt; 1.5'te pozitif</div>
-                            <div class="option" data-value="poz">Tüm tanım kümesinde pozitif</div>
-                            <div class="option" data-value="neg">Tüm tanım kümesinde negatif</div>
+                            <div class="option" data-value="poz-neg">x &lt; 1,5'te negatif, x &gt; 1,5'te pozitif</div>
+                            <div class="option" data-value="poz">Tanım kümesinde pozitif</div>
+                            <div class="option" data-value="neg">Tanım kümesinde negatif</div>
                             <div class="option" data-value="neg-poz">x &lt; 0'da negatif, x &gt; 0'da pozitif</div>
                         </div>
                         <div class="feedback correct">
-                            <i class="fas fa-check-circle"></i> Doğru! Fonksiyon sıfır noktası olan x=1.5'te işaret değiştirir.
+                            <i class="fas fa-check-circle"></i> Doğru! Fonksiyon sıfır noktası olan x=1,5'te işaret değiştirir.
                         </div>
                         <div class="feedback incorrect">
                             <i class="fas fa-times-circle"></i> Yanlış. Fonksiyonun sıfır noktasını dikkate alın.
@@ -1029,9 +1061,7 @@
                 <h3><i class="fas fa-award"></i>2.Soru Sonucu</h3>
                 <div class="score-display" id="total-score">0/25</div>
                 
-                <div class="result-message" id="result-message">
-                    Sınavınız değerlendiriliyor...
-                </div>
+
                 
                 <div class="score-details">
                     <h4>Puan Dağılımı</h4>
@@ -1056,7 +1086,7 @@
                 </div>
                 
                 <button class="next-exam-btn" id="next-exam-btn">
-                    <i class="fas fa-arrow-right"></i> 3. Soruyu Geç
+                    <i class="fas fa-arrow-right"></i> 3.Soruya Geç
                 </button>
             </div>
         </div>
@@ -1084,7 +1114,7 @@
                 <button class="close-modal" id="close-modal">&times;</button>
             </div>
             <div class="modal-instructions">
-                <p>Bu sınavda \( y = 2x - 3 \) bağıntısının fonksiyon olup olmadığını ve fonksiyon özelliklerini inceleyeceksiniz.</p>
+                <p>Bu sınavda y = 2x - 3 bağıntısının fonksiyon olup olmadığını ve fonksiyon özelliklerini inceleyeceksiniz.</p>
                 <ol>
                     <li><strong>Grafiği inceleyin:</strong> İnteraktif grafikte bağıntının nasıl göründüğünü gözlemleyin.</li>
                     <li><strong>Düşey doğru testi:</strong> Sürgüyü hareket ettirerek bağıntının fonksiyon olup olmadığını test edin.</li>
@@ -1148,103 +1178,135 @@
             }
             
             // Grafik çizim fonksiyonları
-            function drawGrid() {
-                const scale = canvas.width / 20; // Ölçeği canvas boyutuna göre dinamik ayarla
-                ctx.strokeStyle = '#e0e0e0';
-                ctx.lineWidth = 1;
-                
-                // Yatay çizgiler
-                for (let y = 0; y <= canvas.height; y += scale) {
-                    ctx.beginPath();
-                    ctx.moveTo(0, y);
-                    ctx.lineTo(canvas.width, y);
-                    ctx.stroke();
-                }
-                
-                // Dikey çizgiler
-                for (let x = 0; x <= canvas.width; x += scale) {
-                    ctx.beginPath();
-                    ctx.moveTo(x, 0);
-                    ctx.lineTo(x, canvas.height);
-                    ctx.stroke();
-                }
-            }
-            
+function drawGrid() {
+    const scale = canvas.width / 20;
+    ctx.strokeStyle = '#f0f0f0'; // Daha açık renk
+    ctx.lineWidth = 0.5; // Daha ince çizgiler
+    
+    // Yatay çizgiler
+    for (let y = 0; y <= canvas.height; y += scale) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+    }
+    
+    // Dikey çizgiler
+    for (let x = 0; x <= canvas.width; x += scale) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+    }
+}
             function drawAxes() {
-                const originX = canvas.width / 2;
-                const originY = canvas.height / 2;
-                const scale = canvas.width / 20;
-                
-                ctx.strokeStyle = '#000';
-                ctx.lineWidth = 2;
-                
-                // X ekseni
-                ctx.beginPath();
-                ctx.moveTo(0, originY);
-                ctx.lineTo(canvas.width, originY);
-                ctx.stroke();
-                
-                // Y ekseni
-                ctx.beginPath();
-                ctx.moveTo(originX, 0);
-                ctx.lineTo(originX, canvas.height);
-                ctx.stroke();
-                
-                // Eksen okları
-                // X ekseni oku
-                ctx.beginPath();
-                ctx.moveTo(canvas.width - 10, originY - 5);
-                ctx.lineTo(canvas.width, originY);
-                ctx.lineTo(canvas.width - 10, originY + 5);
-                ctx.fill();
-                
-                // Y ekseni oku
-                ctx.beginPath();
-                ctx.moveTo(originX - 5, 10);
-                ctx.lineTo(originX, 0);
-                ctx.lineTo(originX + 5, 10);
-                ctx.fill();
-                
-                // Eksen etiketleri
-                ctx.fillStyle = '#000';
-                ctx.font = '14px Arial';
-                
-                // X ekseni etiketleri
-                for (let x = -10; x <= 10; x++) {
-                    if (x === 0) continue;
-                    const pixelX = originX + x * scale;
-                    ctx.fillText(x, pixelX - 5, originY + 20);
-                    
-                    // Kısa çizgiler
-                    ctx.beginPath();
-                    ctx.moveTo(pixelX, originY - 5);
-                    ctx.lineTo(pixelX, originY + 5);
-                    ctx.stroke();
-                }
-                
-                // Y ekseni etiketleri
-                for (let y = -10; y <= 10; y++) {
-                    if (y === 0) continue;
-                    const pixelY = originY - y * scale;
-                    ctx.fillText(y, originX + 10, pixelY + 5);
-                    
-                    // Kısa çizgiler
-                    ctx.beginPath();
-                    ctx.moveTo(originX - 5, pixelY);
-                    ctx.lineTo(originX + 5, pixelY);
-                    ctx.stroke();
-                }
-                
-                ctx.fillStyle = '#000000'; // Turuncu renk
+    const originX = canvas.width / 2;
+    const originY = canvas.height / 2;
+    const scale = canvas.width / 20;
+    
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 1.5;
+    
+    // X ekseni
     ctx.beginPath();
-    ctx.arc(originX, originY, 5, 0, Math.PI * 2);
+    ctx.moveTo(0, originY);
+    ctx.lineTo(canvas.width, originY);
+    ctx.stroke();
+    
+    // Y ekseni
+    ctx.beginPath();
+    ctx.moveTo(originX, 0);
+    ctx.lineTo(originX, canvas.height);
+    ctx.stroke();
+
+    // X ekseni sağ ok
+    ctx.beginPath();
+    ctx.moveTo(canvas.width - 10, originY - 5);
+    ctx.lineTo(canvas.width, originY);
+    ctx.lineTo(canvas.width - 10, originY + 5);
+    ctx.fillStyle = '#000';
     ctx.fill();
     
-    // Orijin etiketi "O" harfi
+    // X ekseni sol ok
+    ctx.beginPath();
+    ctx.moveTo(10, originY - 5);
+    ctx.lineTo(0, originY);
+    ctx.lineTo(10, originY + 5);
+    ctx.fillStyle = '#000';
+    ctx.fill();
+    
+    // Y ekseni üst ok
+    ctx.beginPath();
+    ctx.moveTo(originX - 5, 10);
+    ctx.lineTo(originX, 0);
+    ctx.lineTo(originX + 5, 10);
+    ctx.fillStyle = '#000';
+    ctx.fill();
+    
+    // Y ekseni alt ok
+    ctx.beginPath();
+    ctx.moveTo(originX - 5, canvas.height - 10);
+    ctx.lineTo(originX, canvas.height);
+    ctx.lineTo(originX + 5, canvas.height - 10);
+    ctx.fillStyle = '#000';
+    ctx.fill();
+    
+       // Eksen etiketleri (nokta şeklinde)
+    ctx.fillStyle = '#333';
+    ctx.font = '14px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    
+    // X ekseni etiketleri
+    for (let x = -8; x <= 8; x++) {
+        if (x === 0) continue;
+        const pixelX = originX + x * scale;
+        // Nokta çiz
+        ctx.beginPath();
+        ctx.arc(pixelX, originY, 2, 0, Math.PI * 2);
+        ctx.fill();
+        // Etiket yaz
+        ctx.fillText(x, pixelX, originY + 15);
+    }
+    
+    // Y ekseni etiketleri
+    for (let y = -8; y <= 8; y++) {
+        if (y === 0) continue;
+        const pixelY = originY - y * scale;
+        // Nokta çiz
+        ctx.beginPath();
+        ctx.arc(originX, pixelY, 2, 0, Math.PI * 2);
+        ctx.fill();
+        // Etiket yaz
+        ctx.fillText(y, originX - 15, pixelY);
+    }
+    
+    // Orijin noktasına belirgin bir işaret koy
+    ctx.beginPath();
     ctx.fillStyle = '#1a2a6c';
-    ctx.font = 'bold 20px Arial';
-    ctx.fillText('O', originX + 8, originY + 15);
-            }
+    ctx.arc(originX, originY, 4, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // "O" etiketi
+    ctx.fillStyle = '#1a2a6c';
+    ctx.font = 'bold 16px Arial';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'top';
+    ctx.fillText('O', originX - 2, originY + 4);
+	    // X ekseni etiketi (sağ üst)
+    ctx.fillStyle = '#1a2a6c';
+    ctx.font = 'bold 16px Arial';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText('x', canvas.width - 5, originY - 10);
+    
+    // Y ekseni etiketi (sağ üst)
+    ctx.fillStyle = '#1a2a6c';
+    ctx.font = 'bold 16px Arial';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillText('y', originX + 10, 5);
+}
             
             function drawFunction() {
                 const originX = canvas.width / 2;
@@ -1280,8 +1342,8 @@
                 
                 // Sıfır noktası etiketi
                 ctx.fillStyle = '#b21f1f';
-                ctx.font = 'bold 14px Arial';
-                ctx.fillText('Sıfır Noktası (1,5, 0)', zeroX + 10, zeroY - 10);
+                ctx.font = 'bold 16px Arial';
+                ctx.fillText('(1,5, 0)', zeroX+10, zeroY -20);
             }
             
             function drawVerticalLine() {
@@ -1314,7 +1376,7 @@
                 // Koordinat bilgisi
                 ctx.fillStyle = '#333';
                 ctx.font = '14px Arial';
-                ctx.fillText(`(${xValue.toFixed(2)}, ${y.toFixed(2)})`, pixelX + 10, pixelY - 10);
+                //ctx.fillText(`(${xValue.toFixed(2)}, ${y.toFixed(2)})`, pixelX + 10, pixelY - 10);
             }
             
             function drawInfo() {
@@ -1325,7 +1387,7 @@
                 // Fonksiyon denklemi
                 ctx.fillStyle = '#1a2a6c';
                 ctx.font = 'bold 18px Arial';
-                ctx.fillText('y = 2x - 3', canvas.width - 150, 30);
+             
             }
             
             function drawAll() {
@@ -1343,7 +1405,8 @@
             // Sürgü olayı
             verticalSlider.addEventListener('input', function() {
                 const xValue = parseFloat(this.value);
-                sliderValue.textContent = `x = ${xValue.toFixed(2)}`;
+		
+                sliderValue.textContent = `x = ${xValue.toFixed(2).replace('.', ',')}`;
                 drawAll();
             });
             
@@ -1574,7 +1637,7 @@
                 
                 if (cardId.includes('Tanım')) return answer === 'reel';
                 if (cardId.includes('Görüntü')) return answer === 'reel';
-                if (cardId.includes('Sıfır')) return answer === '1.5';
+                if (cardId.includes('Sıfır')) return answer === '1,5';
                 if (cardId.includes('Artan/Azalan')) return answer === 'artan';
                 if (cardId.includes('Pozitif/Negatif')) return answer === 'poz-neg';
                 if (cardId.includes('Tipi')) return answer === 'dogrusal';
@@ -1594,20 +1657,7 @@
                 totalScoreElement.textContent = `${totalScore}/25`;
                 finalScoreElement.textContent = `${totalScore}/25`;
                 
-                // Sonuç mesajını belirle
-                if (totalScore >= 23) {
-                    resultMessage.textContent = "Mükemmel! Fonksiyon analizinde çok başarılısınız.";
-                    resultMessage.className = "result-message excellent";
-                } else if (totalScore >= 18) {
-                    resultMessage.textContent = "Tebrikler! Fonksiyon analizini iyi anlamışsınız.";
-                    resultMessage.className = "result-message good";
-                } else if (totalScore >= 13) {
-                    resultMessage.textContent = "Orta seviyede başarılı oldunuz. Daha fazla çalışmalısınız.";
-                    resultMessage.className = "result-message average";
-                } else {
-                    resultMessage.textContent = "Fonksiyon analizini daha iyi anlamak için tekrar çalışmalısınız.";
-                    resultMessage.className = "result-message average";
-                }
+
                 
                 // Sonuç bölümünü göster
                 examResult.style.display = 'block';
